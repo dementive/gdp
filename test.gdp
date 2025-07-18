@@ -1,0 +1,240 @@
+@icon("res://path/to/optional/icon.svg")
+
+# (optional) class definition:
+class_name MyClass
+
+# Inheritance:
+extends Node
+
+#include "test_include.gdp"
+
+export int int_number = 5
+export String string_export
+
+onready int ready_int_number = 5
+onready ProgressBar health_bar = get_node("UI/LifeBar")
+
+export if DEBUG_ENABLED: int debug_number = 999
+onready if not DEBUG_ENABLED: int runtime_number = 9000
+
+# Member variables.
+var a = 5 # hmm
+var s = "Hello"
+var arr = [1, 2, 3]
+var dict = {"key": "value", 2: 3}
+
+Dictionary[String, int] other_dict = {"1": 22, "3": 2}
+
+using StringDict = Dictionary[String, String]
+StringDict another_dict = {"1": "22", "3": "2"}
+
+int milliseconds = 10
+int seconds:
+	get:
+		return milliseconds / 1000
+	set(value):
+		milliseconds = value * 1000
+
+int minutes = 60:
+	get:
+		return milliseconds / 10000
+	set(value):
+		milliseconds = value * 10000
+
+int typed_var
+int static_typed_var
+int new_typed_var = 0
+
+var typed_var2: int
+var inferred_type := "String"
+
+static int static_typed_var_2
+static var typed_var2_2: int
+static int new_typed_var_2 = 0
+static var inferred_type_2 := "String"
+
+const int new_typed_var_23 = 0
+static int new_typed_var_234 = 0
+
+constexpr float constexpr_test = sqrt(2)
+constexpr float constexpr_test2 = constexpr_test + sqrt(2)
+
+#define TEST_MACRO really_long_variable_name_that_is_very_long
+int TEST_MACRO = 0
+
+#define TEST_MULTI_LINE_MACRO \
+	int x = 999 \
+	for int i in range(x): \
+		print(i) \
+	var y = 9999
+
+#define THING int thing1 = 0
+THING
+#undef THING
+int THING = 0
+
+fn macro_func() -> void:
+	TEST_MULTI_LINE_MACRO
+	print(x - y)
+
+fn macro_func2() -> void:
+	TEST_MULTI_LINE_MACRO
+	print(x + y)
+
+fn constexpr_usage_test_func(int x) -> int:
+	int value = constexpr_test2 + x
+	return value
+
+consteval float consteval_test = pow(2, 12)
+fn consteval_usage_test_func(int x) -> int:
+	int value = consteval_test + x
+	return value
+
+using Union[String,int,float] = Array
+fn test_union_alias() -> Union[String,int,float]:
+	return Array()
+
+using Optional[String] = Variant
+fn test_union_alias() -> Optional[String]:
+	if 1:
+		return String()
+	else:
+		return null
+
+# Conditional compilation with constant expressions
+#if DEBUG_ENABLED
+fn super_secret_debug_function() -> void:
+	print("I like cats")
+#else
+fn normal_non_debug_function() -> void:
+	print("I like dogs")
+#endif
+
+constexpr int cond_comp_var = 0
+constexpr int cond_comp_var_two = cond_comp_var + 4
+
+consteval int power_level = sqrt(9001 + sqrt(2) * pow(4, 9)) * 5000
+
+#if power_level > 9000
+fn get_favorite_animal() -> String:
+#if DEBUG_ENABLED
+	return "Frogs are my favorite"
+#else
+	return "Rabbits are cool"
+#endif
+#endif
+
+constexpr String x = "Hello" + " World " + "!"
+constexpr Vector3 y = Vector3(5, 5, 5)
+constexpr int z = 999
+consteval Vector2 TEST = Vector2(0, 0)
+
+#if TEST == Vector2(1, 0)
+fn test_test_test():
+	print("hello")
+#endif
+
+# Constants.
+const ANSWER: int = 42
+const THE_NAME = "Charly"
+const int ANSWER_2 = 999
+
+# Enums.
+enum {UNIT_NEUTRAL, UNIT_ENEMY, UNIT_ALLY}
+enum Named {THING_1, THING_2, ANOTHER_THING = -1}
+
+fn some_function(int param1, int param2, int param3) -> int:
+	const local_const = 5
+	bool is_thing_enabled = false
+
+	if true:
+		pass
+
+	if param1 < local_const:
+		print(param1)
+	elif param2 > 5:
+		print(param2)
+	else:
+		print("Fail!")
+
+	for i in range(20):
+		print(i)
+
+	for int i in range(10):
+		print(i)
+
+	if param1 < local_const and 1 > 0:
+		print(param1)
+
+	var next_state = "idle" if true != false else "fall"
+
+	int angle_degrees = 135
+	String quadrant = (
+		"northeast" if angle_degrees <= 90
+		else "southeast" if angle_degrees <= 180
+		else "southwest" if angle_degrees <= 270
+		else "northwest"
+	)
+
+	var position := Vector2(250, 350)
+	if (
+		position.x > 200 and position.x < 400
+		and position.y > 300 and position.y < 400
+	):
+		pass
+
+	while param2 != 0:
+		param2 -= 1
+
+	match param3:
+		3:
+			print("param3 is 3!")
+		_:
+			print("param3 is not 3!")
+
+	int local_var = param1 + 3
+	return local_var
+
+
+# fn something(int p1, p2: int):
+# 	super(p1, p2)
+
+
+# fn other_something(String p1 = "Hello", int p2 = 50):
+# 	super.something(p1, p2)
+
+fn test_thing(int p_thing = 1, vec_thing := Vector2(0, 0)) -> float:
+	return 1.0
+
+static fn test_static() -> void:
+	pass
+
+static fn test_static2(int x = 999) -> void:
+	pass
+
+class Item:
+	int a = 10
+
+fn add(Item reference, int amount) -> Item:
+	reference.add(amount)
+	return reference
+
+Array[Node] vehicles = [$Car, $Plane]
+Array[Item] items = [new Item]
+Array[Array] array_of_arrays = [[], []]
+
+# Constructor
+fn _init():
+	print("Constructed!")
+	var lv = new Object
+	print(lv.a)
+
+	Node custom_node = new Node
+	qfree custom_node
+
+	Object obj = new Object
+	free obj
+
+@abstract class ABClassTest:
+	@abstract func ab_test() -> void
+	@abstract func ab_test2(int x = 999) -> void
