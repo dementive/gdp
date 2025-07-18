@@ -1,7 +1,5 @@
 extends MainLoop
 
-var preprocessor_statements: Array[String] = ["#if", "#else", "#endif", "#include"]
-
 var constexpr_var_pattern: RegEx
 var consteval_var_pattern: RegEx
 
@@ -14,11 +12,9 @@ var annotation_pattern: RegEx
 var annotation_if_pattern: RegEx
 var static_type_pattern: RegEx
 
-var static_type_no_equals_pattern: RegEx
 var type_no_equals_pattern: RegEx
 var typed_for_pattern: RegEx
 var type_alias_pattern: RegEx
-var macro_pattern: RegEx
 
 var is_compilation_enabled: bool = true
 var macro_line_continuation: bool = false

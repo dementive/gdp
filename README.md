@@ -38,16 +38,16 @@ Preprocessor for godot 4.5 gdscript. Adds some nice features that aren't possibl
 	This way you can precompute values at compile time and also have them not use any memory at run time.
 	consteval variables will not exist as variables in the resulting gdscript, everywhere they are referenced they will be replaced with their value at compile time.
 
-
 - C style conditional compilation using constant expressions using #if/#else/#endif preprocessor statements
 	The expression after the preprocessor statement can be any constant expressions, [Expression](https://docs.godotengine.org/en/stable/classes/class_expression.html) or constexpr/consteval variables will work.
 
 - `export if` and `onready if` notation that allows conditional compilation of export and onready variables.
 	For example: `export if DEBUG_ENABLED: int export_var_name = 999` will exclude the export variable line from the output if DEBUG_ENABLED is true.
+	The if statement can be any constant expression or constexpr/consteval variable.
 
 - C style preprocessor #include statements that can be used to paste the contents of another file directly where the #include is found.
 
-- C style preprocessor `#define` statements that define simple macros. Multiline macros are also supported. Unlike C macros, there is no way to take in any parameters as I want to prevent issues caused by creating unsearchable tokens with token pasting. Can also use `#undef` to undefine a macro that was previously defined.
+- C style preprocessor `#define` statements that define simple macros. Multiline macros are also supported. Unlike C macros, there is no way to take in any parameters as I want to prevent issues caused by creating unsearchable tokens with token pasting. Can also use `#undef` to undefine a macro that was previously defined. Be very careful macros, they can make your code very hard to debug if not used carefully.
 
 - C++ style type aliases with `using CustomAliasName = String` syntax.
 
@@ -120,7 +120,7 @@ Array[Item] items = [new Item]
 Array[Array] array_of_arrays = [[], []]
 ```
 
-After running through the preprocessor the above code gets transformed into this:
+After running through the preprocessor the above code will get transformed into the following gdscript code:
 
 ```gdscript
 @onready var runtime_number: int = 9000
@@ -174,4 +174,22 @@ var array_of_arrays: Array[Array] = [[], []]
 
 ```
 
-Still somewhat experimental, there are likely some edge cases that can result in broken output. The compiler also doesn't report hardly any errors, it mostly just passes everything straight to gdscript. Please make an issue if you find any bugs.
+## Limitations
+
+Still mostly experimental, there are likely some edge cases that can result in broken output.
+The compiler also doesn't report hardly any errors, it mostly just passes everything straight to gdscript.
+Please make an issue if you find any bugs.
+
+The code is also definitely not optimal. It's also not really a compiler as it doesn't know hardly anything about the code and doesn't properly parse it. I was mostly just trying to experiment and see if I could get different language features working. It still compiles the tests in 50ms on my computer though so haven't had a need to take time to improve the performance yet.
+
+Debuggablity also suffers a lot when compiling to gdscript. The line numbers do not line up perfectly in the compiled script due to things like conditional compilation. So when you get errors from the gdscript vm at runtime the line number they report might not be the same as the line number was before running the preprocessor. Usually the error gives enough information to figure out the bug but it might make it marginally harder to figure out where errors come from.
+
+## Usage
+
+To run the tests run godot with `godot --headless --script ./gdp_compiler.gd --quit`. This will compile `test.gdp` to `test.gd`. You can then copy `test.gd` into a godot project and open the compiled script in the editor.
+
+Right now there isn't a proper API, only a `compile` function that takes a input file and an output file as parameters.
+I think the ideal way to do it in the future would be to make an EditorPlugin and have it compile automatically on save in the code editor so you can get instant feedback from gdscript's parser and LSP.
+
+The syntax highlighting will be pretty bad in most editors if you use the default gdscript syntax, especially for the preprocessor statements because they are comments in gdscript.
+If you use Sublime Text you can install [SublimeGodot](https://github.com/dementive/SublimeGodot/tree/a18b34b0e8713899161c31d5522c5fc7603bd6d3/gdp) and use the `gdp` syntax, then if your files have the `gdp` extension you'll get correct highlighting for everything new.
