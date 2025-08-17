@@ -1,10 +1,10 @@
-consteval bool DEBUG_ENABLED = false
-consteval bool DEV_ENABLED = false
-consteval bool TOOLS_ENABLED = false
+consteval DEBUG_ENABLED: bool = false
+consteval DEV_ENABLED: bool = false
+consteval TOOLS_ENABLED: bool = false
 
-consteval bool WIN32 = true
-consteval bool LINUX = false
-consteval bool OSX = false
+consteval WIN32: bool = true
+consteval LINUX: bool = false
+consteval OSX: bool = false
 
-fn global_function_test() -> void:
+func global_function_test() -> void:
 	print("Hello World!") # Hi
